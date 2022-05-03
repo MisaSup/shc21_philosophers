@@ -101,5 +101,6 @@ void	get_check_args(int argc, char **argv, t_args *args)
 		}
 		k++;
 	}
+	pthread_mutex_init(&(args->print), NULL);
 	// check_values(args);
 }

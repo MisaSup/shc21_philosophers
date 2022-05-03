@@ -20,6 +20,11 @@
 # include <sys/time.h>
 # include <stdio.h>
 
+#define FORK 11
+#define DFORK -11
+#define EAT 3
+#define SLEEP 1
+
 typedef struct thread_info {
     pthread_t       thread_id;       
     pthread_mutex_t *forks;
@@ -30,12 +35,13 @@ typedef struct thread_info {
 } t_info;
 
 typedef struct arguments {
-    int     num_of_philos;
-    int     time_to_die;
-    int     time_to_eat;
-    int     time_to_sleep;
-    int     meal_counter;
-    t_info  *tinfo;
+    int             num_of_philos;
+    int             time_to_die;
+    int             time_to_eat;
+    int             time_to_sleep;
+    int             meal_counter;
+    t_info          *tinfo;
+    pthread_mutex_t print;
 } t_args;
 
 size_t	ft_strlen(const char *s);

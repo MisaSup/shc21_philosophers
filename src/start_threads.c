@@ -1,5 +1,20 @@
 #include "../philo.h"
 
+void print_state(t_info *info, int state)
+{
+    pthread_mutex_lock(&info->args->print);
+    if (state == FORK)
+        printf ("%4ld #%d gab a fork\n", get_timestamp(info->start_time), info->thread_num + 1);
+    if (state == EAT)
+        printf ("%4ld #%d are eat\n", get_timestamp(info->start_time), info->thread_num + 1);
+    if (state == DFORK)
+        printf ("%4ld #%d down forks\n", get_timestamp(info->start_time), info->thread_num + 1);
+    if (state == SLEEP)
+        printf ("%4ld #%d fall asleep\n", get_timestamp(info->start_time), info->thread_num + 1);
+    pthread_mutex_unlock(&info->args->print);
+
+}
+
 void grab_forks (t_info *info, int f1, int f2)
 {
     if (f2 == info->args->num_of_philos) 
@@ -7,12 +22,17 @@ void grab_forks (t_info *info, int f1, int f2)
     // printf("forks  %d %d #%5d\n", f1, f2, info->thread_num + 1);
     // usleep(1000);
     pthread_mutex_lock(&(info->forks[f1]));
+    print_state(info, FORK);
     pthread_mutex_lock(&(info->forks[f2]));
-    printf ("%4ld #%d gab a fork\n", get_timestamp(info->start_time), info->thread_num + 1);
-	// info->status = 10;
-	// info->status = 11;
-    printf ("%4ld #%d gab a fork\n", get_timestamp(info->start_time), info->thread_num + 1);
-    printf ("%4ld #%d are eat\n", get_timestamp(info->start_time), info->thread_num + 1);
+    print_state(info, FORK);
+    // printf ("%4ld #%d gab a fork\n", get_timestamp(info->start_time), info->thread_num + 1);
+}
+
+void getting_meal(t_info *info)
+{
+    // printf ("%4ld #%d are eat\n", get_timestamp(info->start_time), info->thread_num + 1);
+
+    print_state(info, EAT);
     usleep(info->args->time_to_eat);
 }
 
@@ -20,10 +40,17 @@ void down_forks (t_info *info, int f1, int f2)
 { 
     if (f2 == info->args->num_of_philos) 
         f2 = 0;
-    printf ("%4ld #%d down forks\n", get_timestamp(info->start_time), info->thread_num + 1);
-	info->status = 9;
-    pthread_mutex_unlock(&(info->forks[f2])); 
+    // printf ("%4ld #%d down forks\n", get_timestamp(info->start_time), info->thread_num + 1);
+    print_state(info, DFORK);
     pthread_mutex_unlock(&(info->forks[f1])); 
+    pthread_mutex_unlock(&(info->forks[f2])); 
+}
+
+void fall_asleep(t_info *info)
+{
+    // printf ("%4ld #%d fall asleep\n", get_timestamp(info->start_time), info->thread_num + 1);
+    print_state(info, SLEEP);
+    usleep(info->args->time_to_sleep);
 }
 
 void *sit_at_the_table(void *arg)
@@ -36,7 +63,9 @@ void *sit_at_the_table(void *arg)
         usleep(500); */
     grab_forks(info, info->thread_num, info->thread_num + 1);
         // printf("Philo #%d are eating\n", info->thread_num + 1);
+    getting_meal(info);
     down_forks(info, info->thread_num, info->thread_num + 1);
+    fall_asleep(info);
     return NULL;
 }
 
