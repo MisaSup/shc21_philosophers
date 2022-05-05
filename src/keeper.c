@@ -16,9 +16,10 @@ void *keeper(void *info)
 			if ((args->time_to_die / 1000) - get_timestamp(args->tinfo[i].last_meal) < 0)
 			{
 				// printf("DEAD ST %ld\n", get_timestamp(args->tinfo[i].last_meal) - (args->time_to_die / 1000));
-				// args->status = DEAD;
+				args->status = DEAD;
 				status = 0;
 				print_state(&(args->tinfo[i]), DEAD);
+				break ;
 				// completion(args);
 			}	
 			i++;
