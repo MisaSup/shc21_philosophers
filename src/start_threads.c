@@ -4,25 +4,23 @@
 
 void print_state(t_info *info, int state)
 {
-    // if (state == DEAD)
     if (state == DEAD)
         printf ("%4ld #%d died!\n", get_timestamp(info->start_time), info->thread_num + 1);
-    // pthread_mutex_lock(&(info->args->dead_mutex));
-    // if (state != DEAD)
-        // pthread_mutex_unlock(&(info->args->dead_mutex));
-    if (state == FORK)
-        printf ("%4ld #%d has taken a fork\n", get_timestamp(info->start_time), info->thread_num + 1);
-    else if (state == EAT)
-        printf ("%4ld #%d is eating\n", get_timestamp(info->start_time), info->thread_num + 1);
-    else if (state == DFORK) //DELETE
-        printf ("%4ld #%d down forks\n", get_timestamp(info->start_time), info->thread_num + 1);
-    else if (state == SLEEP)
-        printf ("%4ld #%d is sleeping\n", get_timestamp(info->start_time), info->thread_num + 1);
-    else if (state == THINK)
-        printf ("%4ld #%d is thinking\n", get_timestamp(info->start_time), info->thread_num + 1);
+    if (info->args->status)
+    {
+        if (state == FORK)
+            printf ("%4ld #%d has taken a fork\n", get_timestamp(info->start_time), info->thread_num + 1);
+        else if (state == EAT)
+            printf ("%4ld #%d is eating\n", get_timestamp(info->start_time), info->thread_num + 1);
+        else if (state == SLEEP)
+            printf ("%4ld #%d is sleeping\n", get_timestamp(info->start_time), info->thread_num + 1);
+        else if (state == THINK)
+            printf ("%4ld #%d is thinking\n", get_timestamp(info->start_time), info->thread_num + 1);
+    }
+    
 }
 
-void grab_forks (t_info *info, int f1, int f2)
+/* void grab_forks (t_info *info, int f1, int f2)
 {
     if (f2 == info->args->num_of_philos) 
         f2 = 0;
@@ -67,7 +65,7 @@ void routine(t_info *info)
     down_forks(info, info->thread_num, info->thread_num + 1);
     fall_asleep_n_think(info);
 }
-
+ */
 void *sit_at_the_table(void *arg)
 {
     t_info *info;
