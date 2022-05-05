@@ -109,5 +109,4 @@ void	get_check_args(int argc, char **argv, t_args *args)
 	}
 	pthread_mutex_init(&(args->dead_mutex), NULL);
 	args->status = 100;
-	// check_values(args);
 }

@@ -17,55 +17,8 @@ void print_state(t_info *info, int state)
         else if (state == THINK)
             printf ("%4ld #%d is thinking\n", get_timestamp(info->start_time), info->thread_num + 1);
     }
-    
 }
 
-/* void grab_forks (t_info *info, int f1, int f2)
-{
-    if (f2 == info->args->num_of_philos) 
-        f2 = 0;
-    pthread_mutex_lock(&(info->forks[f1]));
-    print_state(info, FORK);
-    pthread_mutex_lock(&(info->forks[f2]));
-    print_state(info, FORK);
-    // printf ("%4ld #%d gab a fork\n", get_timestamp(info->start_time), info->thread_num + 1);
-}
-
-void getting_meal(t_info *info)
-{
-    // printf ("%4ld #%d are eat\n", get_timestamp(info->start_time), info->thread_num + 1);
-
-    print_state(info, EAT);
-    info->last_meal = get_miliseconds();
-    usleep(info->args->time_to_eat);
-}
-
-void down_forks (t_info *info, int f1, int f2) 
-{ 
-    if (f2 == info->args->num_of_philos) 
-        f2 = 0;
-    // printf ("%4ld #%d down forks\n", get_timestamp(info->start_time), info->thread_num + 1);
-    print_state(info, DFORK); //DELETE
-    pthread_mutex_unlock(&(info->forks[f1]));
-    pthread_mutex_unlock(&(info->forks[f2])); 
-}
-
-void fall_asleep_n_think(t_info *info)
-{
-    // printf ("%4ld #%d fall asleep\n", get_timestamp(info->start_time), info->thread_num + 1);
-    print_state(info, SLEEP);
-    usleep(info->args->time_to_sleep);
-    print_state(info, THINK);
-}
-
-void routine(t_info *info)
-{
-    grab_forks(info, info->thread_num, info->thread_num + 1);
-    getting_meal(info);
-    down_forks(info, info->thread_num, info->thread_num + 1);
-    fall_asleep_n_think(info);
-}
- */
 void *sit_at_the_table(void *arg)
 {
     t_info *info;
@@ -74,10 +27,14 @@ void *sit_at_the_table(void *arg)
     info = (t_info *)arg;
     i = -1;
     if (info->args->meal_counter)
-        while (info->status != DEAD && ++i < info->args->meal_counter)
+    {
+        while (info->args->status != DEAD && ++i < info->args->meal_counter)
             routine(info);
+        if (info->args->status != DEAD)
+            info->args->status = DONE;
+    }
     else
-        while (info->status != DEAD)
+        while (info->args->status != DEAD)
             routine(info);
 
     return NULL;

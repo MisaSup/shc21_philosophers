@@ -1,4 +1,5 @@
 #include "../philo.h"
+#include <stdio.h>
 
 void grab_forks (t_info *info, int f1, int f2)
 {
@@ -6,6 +7,9 @@ void grab_forks (t_info *info, int f1, int f2)
         f2 = 0;
     pthread_mutex_lock(&(info->forks[f1]));
     print_state(info, FORK);
+    while (info->args->num_of_philos == 1 && info->args->status);
+    if (info->args->status == DEAD)
+        pthread_mutex_unlock(&(info->forks[f1]));
     pthread_mutex_lock(&(info->forks[f2]));
     print_state(info, FORK);
 }

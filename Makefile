@@ -2,13 +2,8 @@ NAME = philo
 
 HEADER = philo.h 
 
-# LIST_C = main.c  exit_psw.c start_sort.c check_number.c\
-# double_linked_list.c swap.c push.c rotate.c reverser.c \
-# min_max.c base_case.c double_linked_list2.c check_get_args.c\
-# redux_sort.c  ft_strncmp.c ft_split_ex.c\
-
-LIST_C = main.c time.c check_get_args.c ft_atoi.c ft_strchr.c start_threads.c keeper.c \
-		completion.c routine.c
+LIST_C = main.c time.c check_get_args.c ft_atoi.c ft_strchr.c \
+		start_threads.c keeper.c routine.c
 
 OBJ_C = ${patsubst %.c, ${OBJ}%.o, ${LIST_C}}
 

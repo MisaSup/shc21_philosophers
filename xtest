@@ -1,4 +1,4 @@
 #!/bin/bash
 
 make re
-./philo 4 310 200 100 4
+./philo 4 310 200 100 10
