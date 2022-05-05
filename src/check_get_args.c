@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../philo.h"
+#include <stdlib.h>
 
 int	count_numbers(char *s)
 {
@@ -57,6 +58,7 @@ void set_value(t_args *args, int num, int k)
 		if (num == 0 || num > 200)
 			exit(1);
 		args->num_of_philos = num;
+		args->meal_counter = 0;	
 	}
 	else if (k == 1)
 		args->time_to_die = num * 1000;
@@ -65,7 +67,11 @@ void set_value(t_args *args, int num, int k)
 	else if (k == 3)
 		args->time_to_sleep = num * 1000;			
 	else if (k == 4)
+	{
+		if (num < 0)
+			exit(0);
 		args->meal_counter = num;		
+	}
 }
 
 /* void check_values(t_args *args)
@@ -101,6 +107,6 @@ void	get_check_args(int argc, char **argv, t_args *args)
 		}
 		k++;
 	}
-	pthread_mutex_init(&(args->print), NULL);
+	pthread_mutex_init(&(args->dead_mutex), NULL);
 	// check_values(args);
 }

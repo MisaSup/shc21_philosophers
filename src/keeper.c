@@ -13,15 +13,15 @@ void *keeper(void *info)
 		i = 0;
 		while (i < args->num_of_philos)
 		{
-			if (args->tinfo[i].status == 10 || args->tinfo[i].status == 11)
-				// printf("T%zd #%d st %d\n", get_timestamp(args->tinfo[i].start_time), args->tinfo[i].thread_num, args->tinfo[i].status);
-			if (args->tinfo[i].status == 9)
-				// printf("T%zd #%d st %d\n", get_timestamp(args->tinfo[i].start_time), args->tinfo[i].thread_num, args->tinfo[i].status);
-			if (args->tinfo[i].status == 0)
+			if ((args->time_to_die / 1000) - get_timestamp(args->tinfo[i].last_meal) < 0)
+			{
+				// printf("DEAD ST %ld\n", get_timestamp(args->tinfo[i].last_meal) - (args->time_to_die / 1000));
+				// args->status = DEAD;
 				status = 0;
-			// printf("i %d\n", i);
+				print_state(&(args->tinfo[i]), DEAD);
+				// completion(args);
+			}	
 			i++;
-			
 		}
 	}
 	return NULL;

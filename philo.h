@@ -20,16 +20,19 @@
 # include <sys/time.h>
 # include <stdio.h>
 
-#define FORK 11
-#define DFORK -11
-#define EAT 3
+#define DEAD 0
 #define SLEEP 1
+#define THINK 2
+#define EAT 3
+#define FORK 11
+#define DFORK -11 //DELETE
 
 typedef struct thread_info {
     pthread_t       thread_id;       
     pthread_mutex_t *forks;
     int             thread_num;
     ssize_t         start_time;
+    ssize_t         last_meal;
     int             status;
     struct arguments *args;
 } t_info;
@@ -40,19 +43,24 @@ typedef struct arguments {
     int             time_to_eat;
     int             time_to_sleep;
     int             meal_counter;
+    int             status;
     t_info          *tinfo;
-    pthread_mutex_t print;
+    pthread_mutex_t dead_mutex;
+    pthread_t       keeper_id;
 } t_args;
 
 size_t	ft_strlen(const char *s);
 int	    ft_atoi(const char *str);
 char	*ft_strchr(const char *s, int c);
 
-void start_threads(t_args *arguments);
+void    init_threads(t_args *arguments);
 void	get_check_args(int argc, char **argv, t_args *args);
 ssize_t get_miliseconds();
 ssize_t get_timestamp(ssize_t start_time);
 void    *keeper(void *info);
+void print_state(t_info *info, int state);
+void routine(t_info *info);
+void completion(t_args *arguments);
 // // RULES
 // void	push(t_st **a, t_st **b, char c);
 // void	swap(t_st **a, t_st **b, char c);

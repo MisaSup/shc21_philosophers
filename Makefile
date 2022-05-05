@@ -7,7 +7,8 @@ HEADER = philo.h
 # min_max.c base_case.c double_linked_list2.c check_get_args.c\
 # redux_sort.c  ft_strncmp.c ft_split_ex.c\
 
-LIST_C = main.c time.c check_get_args.c ft_atoi.c ft_strchr.c start_threads.c keeper.c
+LIST_C = main.c time.c check_get_args.c ft_atoi.c ft_strchr.c start_threads.c keeper.c \
+		completion.c routine.c
 
 OBJ_C = ${patsubst %.c, ${OBJ}%.o, ${LIST_C}}
 
@@ -21,7 +22,7 @@ GREEN = \033[0;32m
 NC = \033[0m
 
 all : ${NAME}
-	@echo "${GREEN}DONE !${NC}"
+	@echo "<<<< DONE ! >>>>"
 
 ${NAME} : ${OBJ_C} ${OBJ}
 	@gcc -o ${NAME} ${FLAGS} ${PTHREAD} ${OBJ_C}
