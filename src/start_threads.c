@@ -5,7 +5,10 @@
 void print_state(t_info *info, int state)
 {
     if (state == DEAD)
+    {
+        pthread_mutex_lock(&info->args->dead_mutex);
         printf ("%4ld #%d died!\n", get_timestamp(info->start_time), info->thread_num + 1);
+    }
     if (info->args->status)
     {
         if (state == FORK)
@@ -36,7 +39,6 @@ void *sit_at_the_table(void *arg)
     else
         while (info->args->status != DEAD)
             routine(info);
-
     return NULL;
 }
 
@@ -57,7 +59,7 @@ int start_threads(t_info *tinfo, pthread_mutex_t *forks, t_args *arguments)
 		tinfo[i].args = arguments;
         if(pthread_create(&tinfo[i].thread_id, NULL, sit_at_the_table, &tinfo[i]))
             return (1);
-        usleep(500);
+        usleep(100);
     }
     pthread_create(&keeper_id, NULL, keeper, arguments);
 	pthread_detach(keeper_id);

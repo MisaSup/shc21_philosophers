@@ -56,6 +56,7 @@ char	*ft_strchr(const char *s, int c);
 void	get_check_args(int argc, char **argv, t_args *args);
 ssize_t get_miliseconds();
 ssize_t get_timestamp(ssize_t start_time);
+void    timer(ssize_t start, int finish);
 void    init_threads(t_args *arguments);
 void    *keeper(void *info);
 void    print_state(t_info *info, int state);

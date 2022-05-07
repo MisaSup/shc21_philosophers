@@ -61,11 +61,11 @@ void set_value(t_args *args, int num, int k)
 		args->meal_counter = 0;	
 	}
 	else if (k == 1)
-		args->time_to_die = num * 1000;
+		args->time_to_die = num;
 	else if (k == 2)
-		args->time_to_eat = num * 1000;
+		args->time_to_eat = num;
 	else if (k == 3)
-		args->time_to_sleep = num * 1000;			
+		args->time_to_sleep = num;			
 	else if (k == 4)
 	{
 		if (num < 0)

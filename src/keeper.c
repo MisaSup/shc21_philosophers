@@ -11,7 +11,7 @@ void *keeper(void *info)
 		i = 0;
 		while (i < args->num_of_philos)
 		{
-			if ((args->time_to_die / 1000) - get_timestamp(args->tinfo[i].last_meal) < 0)
+			if (args->time_to_die - get_timestamp(args->tinfo[i].last_meal) < 0)
 			{
 				args->status = DEAD;
 				print_state(&(args->tinfo[i]), DEAD);
@@ -21,5 +21,7 @@ void *keeper(void *info)
 		if (args->status == DEAD || args->status == DONE)
 			break ;
 	}
+	if (args->status == DEAD)
+		pthread_mutex_unlock(&(args->dead_mutex));
 	return NULL;
 }

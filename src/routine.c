@@ -18,7 +18,7 @@ void getting_meal(t_info *info)
 {
     print_state(info, EAT);
     info->last_meal = get_miliseconds();
-    usleep(info->args->time_to_eat);
+    timer(info->last_meal, info->args->time_to_eat);
 }
 
 void down_forks (t_info *info, int f1, int f2) 
@@ -26,13 +26,16 @@ void down_forks (t_info *info, int f1, int f2)
     if (f2 == info->args->num_of_philos) 
         f2 = 0;
     pthread_mutex_unlock(&(info->forks[f1]));
-    pthread_mutex_unlock(&(info->forks[f2])); 
+    pthread_mutex_unlock(&(info->forks[f2]));
 }
 
 void fall_asleep_n_think(t_info *info)
 {
+    ssize_t start_sleep;
+
     print_state(info, SLEEP);
-    usleep(info->args->time_to_sleep);
+    start_sleep = get_miliseconds();
+    timer(start_sleep, info->args->time_to_sleep);
     print_state(info, THINK);
 }
 
