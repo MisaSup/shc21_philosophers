@@ -42,6 +42,13 @@ void *sit_at_the_table(void *arg)
     return NULL;
 }
 
+void set_params(t_info *tinfo, pthread_mutex_t *forks, t_args *arguments, int i)
+{
+    tinfo[i].thread_num = i;
+    tinfo[i].forks = forks;
+	tinfo[i].args = arguments;
+}
+
 int start_threads(t_info *tinfo, pthread_mutex_t *forks, t_args *arguments)
 {
     int i;
@@ -54,18 +61,17 @@ int start_threads(t_info *tinfo, pthread_mutex_t *forks, t_args *arguments)
     {
         tinfo[i].start_time = time;
         tinfo[i].last_meal = time;
-        tinfo[i].thread_num = i;
-        tinfo[i].forks = forks;
-		tinfo[i].args = arguments;
+        set_params(tinfo, forks, arguments, i);
         if(pthread_create(&tinfo[i].thread_id, NULL, sit_at_the_table, &tinfo[i]))
-            return (1);
+            return (4);
         usleep(100);
     }
     pthread_create(&keeper_id, NULL, keeper, arguments);
 	pthread_detach(keeper_id);
     i = -1;
     while (++i < arguments->num_of_philos)
-        pthread_join(tinfo[i].thread_id, NULL);
+        if(pthread_join(tinfo[i].thread_id, NULL))
+            return (5);
     return (0);
 }
 
@@ -78,14 +84,16 @@ void init_threads(t_args *arguments)
     tinfo = (t_info *)malloc(sizeof(t_info) * arguments->num_of_philos);
     forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * arguments->num_of_philos);
     if (!(tinfo) || !(forks))
-        exit(0);
+        error_mes(2, arguments);
     i = -1;
     while (++i < arguments->num_of_philos)
     {
-        pthread_mutex_init(&(forks[i]), NULL);
+        if(pthread_mutex_init(&(forks[i]), NULL))
+            error_mes(3, arguments);
         tinfo[i].status = -1;
     }
-	arguments->tinfo = tinfo;
-    if (start_threads(tinfo, forks, arguments))
-        exit(0);
+	arguments->tinfo = tinfo; 
+    i = start_threads(tinfo, forks, arguments);
+    if (i)
+        error_mes(i, arguments);
 }

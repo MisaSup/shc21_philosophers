@@ -61,5 +61,6 @@ void    init_threads(t_args *arguments);
 void    *keeper(void *info);
 void    print_state(t_info *info, int state);
 void    routine(t_info *info);
+void    error_mes(int num, t_args *arguments);
 
 #endif

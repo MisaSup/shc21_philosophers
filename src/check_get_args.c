@@ -56,7 +56,7 @@ void set_value(t_args *args, int num, int k)
 	if (k == 0)
 	{
 		if (num == 0 || num > 200)
-			exit(1);
+			error_mes(1, args);
 		args->num_of_philos = num;
 		args->meal_counter = 0;	
 	}
@@ -67,24 +67,22 @@ void set_value(t_args *args, int num, int k)
 	else if (k == 3)
 		args->time_to_sleep = num;			
 	else if (k == 4)
-	{
-		if (num < 0)
-			exit(0);
-		args->meal_counter = num;		
-	}
+		args->meal_counter = num;
 }
 
-/* void check_values(t_args *args)
+void check_values(t_args *args)
 {
 	if (args->num_of_philos < 0)
-		exit(1);
+		error_mes(1, args);
 	else if (args->time_to_die < 0)
-		exit(1);
+		error_mes(1, args);
 	else if (args->time_to_eat < 0)
-		exit(1);
+		error_mes(1, args);
 	else if (args->time_to_sleep < 0)
-		exit(1);
-} */
+		error_mes(1, args);
+	else if (args->meal_counter < 0)
+		error_mes(1, args);
+}
 
 void	get_check_args(int argc, char **argv, t_args *args)
 {
@@ -93,13 +91,13 @@ void	get_check_args(int argc, char **argv, t_args *args)
 
 	k = 0;
 	if (argc > 5 || argc < 4)
-		exit(1);
+		error_mes(1, args);
 	while (k < argc)
 	{
 		if (!check_non_numeric(argv[k]))
-			exit(1);
+			error_mes(1, args);
 		if (count_numbers(argv[k]) > 1)
-			exit(1);
+			error_mes(1, args);
 		else if (count_numbers(argv[k]) == 1)
 		{
 			num = ft_atoi(argv[k]);
